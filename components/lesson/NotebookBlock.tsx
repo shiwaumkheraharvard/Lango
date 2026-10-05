@@ -44,6 +44,19 @@ export function NotebookBlock({ lesson, task, todaysWords, dispatch, onDone }: P
     }
   }
 
+  /** Desktop demo helper: load a bundled sample page so the flow can be shown without a phone. */
+  async function loadSamplePage() {
+    try {
+      setError(null);
+      const res = await fetch("/demo-notebook.png");
+      const blob = await res.blob();
+      const dataUrl = await fileToDataUrl(new File([blob], "sample.png", { type: "image/png" }));
+      dispatch({ type: "PHOTO", photo: dataUrl });
+    } catch {
+      setError("Couldn't load the sample page.");
+    }
+  }
+
   async function gradeNow() {
     if (!photo) return;
     setGrading(true);
@@ -160,6 +173,11 @@ export function NotebookBlock({ lesson, task, todaysWords, dispatch, onDone }: P
                     <span className="text-sm font-bold">Upload</span>
                   </motion.button>
                 </div>
+              )}
+              {!photo && (
+                <button type="button" onClick={() => void loadSamplePage()} className="mt-2 w-full text-center text-xs font-semibold text-warm hover:text-ink">
+                  No notebook handy? Use a sample page
+                </button>
               )}
               {error && <p className="mt-2 text-center text-xs font-medium text-[#B42318]">{error}</p>}
               {timeUp && !photo && <p className="mt-2 text-center text-xs font-semibold text-orange-deep" role="status">Time's up — snap the page when you've finished writing.</p>}

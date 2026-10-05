@@ -84,7 +84,7 @@ export function FlashcardDeck({ queue: initial, language, muted, onGraded, onFin
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!card || done) return;
-      if (e.key === " " || e.key === "Enter") {
+      if ((e.key === " " || e.key === "Enter") && !(e.target instanceof HTMLElement && e.target.closest("[role=button],button,input,textarea"))) {
         e.preventDefault();
         setFlipped((f) => !f);
       }
@@ -135,12 +135,19 @@ export function FlashcardDeck({ queue: initial, language, muted, onGraded, onFin
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
             className="h-full"
           >
-            <motion.button
-              type="button"
+            <motion.div
+              role="button"
+              tabIndex={0}
               onClick={() => setFlipped((f) => !f)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setFlipped((f) => !f);
+                }
+              }}
               aria-label={flipped ? "Show word" : "Show translation"}
               aria-pressed={flipped}
-              className="flip-inner relative h-full w-full text-left"
+              className="flip-inner relative h-full w-full cursor-pointer text-left"
               animate={{ rotateY: flipped ? 180 : 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 26 }}
               whileTap={{ scale: 0.985 }}
@@ -195,7 +202,7 @@ export function FlashcardDeck({ queue: initial, language, muted, onGraded, onFin
                   </button>
                 </div>
               </div>
-            </motion.button>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
       </div>
