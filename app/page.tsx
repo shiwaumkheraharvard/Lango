@@ -103,7 +103,7 @@ export default function LandingPage() {
               ))}
             </ol>
           </div>
-          <div className="pointer-events-none absolute -bottom-10 -right-6 opacity-90 md:-right-2">
+          <div className="pointer-events-none absolute -bottom-10 -right-6 hidden opacity-90 sm:block md:-right-2">
             <Polo pose="idle" size={200} />
           </div>
         </div>
