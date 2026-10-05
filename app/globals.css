@@ -3,25 +3,98 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --orange: #ff6b1a;
+  --orange-deep: #e85d04;
+  --orange-soft: #fff1e6;
+  --ink: #1a1a1a;
+  --warm: #6b6b6b;
+  --bg: #ffffff;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-white text-ink font-sans;
+    font-size: 16px;
+    line-height: 1.5;
+    overscroll-behavior-y: none;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tighter;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  button, input, select, textarea { font: inherit; }
+  :focus-visible {
+    outline: 3px solid rgba(255, 107, 26, 0.55);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+  ::selection { background: rgba(255, 107, 26, 0.25); }
+}
+
+@layer components {
+  .mesh {
+    background-color: #fff;
+    background-image:
+      radial-gradient(at 20% 10%, rgba(255, 107, 26, 0.22) 0px, transparent 50%),
+      radial-gradient(at 85% 5%, rgba(255, 183, 128, 0.35) 0px, transparent 45%),
+      radial-gradient(at 60% 60%, rgba(255, 241, 230, 0.9) 0px, transparent 55%),
+      radial-gradient(at 5% 80%, rgba(232, 93, 4, 0.12) 0px, transparent 50%);
+  }
+  .mesh-strong {
+    background-color: #ff6b1a;
+    background-image:
+      radial-gradient(at 15% 15%, rgba(255, 170, 110, 0.9) 0px, transparent 50%),
+      radial-gradient(at 90% 10%, rgba(255, 241, 230, 0.6) 0px, transparent 40%),
+      radial-gradient(at 80% 90%, rgba(232, 93, 4, 1) 0px, transparent 55%),
+      radial-gradient(at 10% 95%, rgba(255, 120, 50, 0.9) 0px, transparent 50%);
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-soft border border-line;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.6 0 0 0 0 0.4 0 0 0 0 0.2 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .skeleton {
+    @apply rounded-xl bg-orange-soft/70 animate-shimmer;
+    background-image: linear-gradient(90deg, rgba(255,241,230,0.6) 0%, rgba(255,255,255,0.9) 50%, rgba(255,241,230,0.6) 100%);
+    background-size: 200% 100%;
+  }
+  .flip-scene { perspective: 1200px; }
+  .flip-inner { transform-style: preserve-3d; }
+  .flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .flip-back { transform: rotateY(180deg); }
+  .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+  .notebook-lines {
+    background-color: #fffdf9;
+    background-image:
+      linear-gradient(to right, rgba(232, 93, 4, 0.35) 1px, transparent 1px),
+      repeating-linear-gradient(to bottom, transparent 0 31px, rgba(26, 26, 26, 0.10) 31px 32px);
+    background-size: 100% 100%, 100% 32px;
+    background-position: 44px 0, 0 10px;
+    background-repeat: no-repeat, repeat;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

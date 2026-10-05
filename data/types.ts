@@ -205,3 +205,55 @@ export interface DayRecord {
   };
   completedAt?: string;
 }
+
+// ---------- Lesson engine state ----------
+
+export type BlockKind = "flashcards" | "conversation" | "grammar" | "notebook";
+
+export interface LessonBlock {
+  kind: BlockKind;
+  /** Planned seconds for this block. */
+  budgetSec: number;
+  /** Seconds left (budget + carried − elapsed). */
+  remainingSec: number;
+  /** Seconds rolled over from earlier blocks. */
+  carriedSec: number;
+  timeUp: boolean;
+  startedAt?: string;
+  endedAt?: string;
+}
+
+export interface DailyPlan {
+  scenarioId: string;
+  grammarRuleId: string;
+  writingTaskId: string;
+}
+
+export interface LessonProgress {
+  date: string;
+  language: Language;
+  level: Level;
+  lessonLength: LessonLength;
+  status: "idle" | "running" | "complete";
+  blockIndex: number;
+  blocks: LessonBlock[];
+  plan: DailyPlan;
+  flashcards: { stats: FlashcardStats; reviewedCardIds: string[]; done: boolean };
+  conversation: { transcript: ChatMessage[]; summary?: ConversationSummary };
+  notebook: { photo?: string; grade?: NotebookGrade };
+  startedAt?: string;
+  completedAt?: string;
+}
+
+/** Everything persisted for the fake user. */
+export interface PersistedState {
+  version: 1;
+  profile: UserProfile;
+  /** SM-2 state keyed by card id; content is joined from /data at read time. */
+  cards: Record<string, Sm2State>;
+  /** Which languages have had their cards seeded. */
+  seededLanguages: Language[];
+  history: Record<string, DayRecord>;
+  todayLesson?: LessonProgress;
+  seededOn: string;
+}

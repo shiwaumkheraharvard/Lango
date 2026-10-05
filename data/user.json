@@ -1,0 +1,11 @@
+{
+  "name": "Sam",
+  "language": "ru",
+  "level": "intermediate",
+  "lessonLength": 20,
+  "reminderTime": "09:00",
+  "timezone": "America/New_York",
+  "muteTutor": false,
+  "onboarded": true,
+  "streakAtSeed": 6
+}
